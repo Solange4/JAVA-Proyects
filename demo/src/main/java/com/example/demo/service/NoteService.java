@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.NoteDTO;
 import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.Note;
 
@@ -11,9 +12,9 @@ public interface NoteService {
     // Eliminar nota
     void delete(Note note);
     // Listar todas las notas
-    Iterable<Note> findAll();
+    Iterable<NoteDTO> findAll();
     // Listar notas por categoria
-    List<Note> findByCategory(Category category);
+    List<NoteDTO> findByCategory(Category category);
     // Listar notas por ID
     Note findById(Long id);
 }

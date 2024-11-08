@@ -23,7 +23,6 @@ public class Note {
     private String content;
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime created;
-    private boolean archived;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
