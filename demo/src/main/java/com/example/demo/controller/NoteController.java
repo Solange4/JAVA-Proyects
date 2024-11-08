@@ -19,32 +19,38 @@ public class NoteController {
     private NoteService noteService;
 
     @PostMapping("note")
+    @ResponseStatus(HttpStatus.CREATED)
     public Note create(@RequestBody Note note){
         return noteService.save(note);
     }
 
     @PutMapping("note")
+    @ResponseStatus(HttpStatus.CREATED)
     public Note update(@RequestBody Note note){
         return noteService.save(note);
     }
 
     @DeleteMapping("note/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id){
         Note noteDelete = noteService.findById(id);
         noteService.delete(noteDelete);
     }
 
     @GetMapping("note/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public Note showById(@PathVariable Long id){
         return noteService.findById(id);
     }
 
     @GetMapping("notes")
+    @ResponseStatus(HttpStatus.OK)
     public Iterable<NoteDTO> showAll(){
         return noteService.findAll();
     }
 
     @GetMapping("notes/category/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public List<NoteDTO> showByCategory(@PathVariable Long id){
         Category category = new Category();
         category.setId(id);
