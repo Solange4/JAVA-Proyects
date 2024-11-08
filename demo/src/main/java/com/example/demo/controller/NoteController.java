@@ -39,14 +39,16 @@ public class NoteController {
         return noteService.findById(id);
     }
 
-//    public Iterable<NoteDTO> showAll(){
-//        return noteService.findAll();
-//    }
-//
-//    public ResponseEntity<List<NoteDTO>> showByCategory(@PathVariable Long id){
-//        Category category = new Category();
-//        category.setId(id);
-//        List<NoteDTO> notesByCategory = noteService.findByCategory(category);
-//        return new ResponseEntity<>(notesByCategory, HttpStatus.OK);
-//    }
+    @GetMapping("notes")
+    public Iterable<NoteDTO> showAll(){
+        return noteService.findAll();
+    }
+
+    @GetMapping("notes/category/{id}")
+    public List<NoteDTO> showByCategory(@PathVariable Long id){
+        Category category = new Category();
+        category.setId(id);
+        List<NoteDTO> notesByCategory = noteService.findByCategory(category);
+        return notesByCategory;
+    }
 }
