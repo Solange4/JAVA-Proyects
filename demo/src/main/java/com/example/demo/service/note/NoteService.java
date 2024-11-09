@@ -1,4 +1,4 @@
-package com.example.demo.service;
+package com.example.demo.service.note;
 
 import com.example.demo.dto.NoteDTO;
 import com.example.demo.model.entity.Category;

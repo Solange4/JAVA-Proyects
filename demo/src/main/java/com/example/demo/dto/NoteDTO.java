@@ -1,7 +1,13 @@
 package com.example.demo.dto;
 
-public record NoteDTO (
-        String title,
-        String content,
-        String categoryName
-) {}
+import jakarta.validation.constraints.NotNull;
+
+public record NoteDTO(
+    @NotNull(message = "El campo 'title' no puede ser nulo")
+    String title,
+    @NotNull(message = "El campo 'content' no puede ser nulo")
+    String content,
+    @NotNull(message = "El campo 'categoryName' no puede ser nulo")
+    String categoryName
+) {
+}

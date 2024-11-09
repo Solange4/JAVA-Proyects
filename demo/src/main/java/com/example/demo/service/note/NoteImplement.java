@@ -1,10 +1,9 @@
-package com.example.demo.service.implement;
+package com.example.demo.service.note;
 
 import com.example.demo.dto.NoteDTO;
 import com.example.demo.model.entity.Category;
 import com.example.demo.model.entity.Note;
 import com.example.demo.model.repository.NoteRepository;
-import com.example.demo.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
