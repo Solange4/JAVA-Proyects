@@ -11,6 +11,3 @@ CREATE TABLE notes (
     category_id BIGINT,
     FOREIGN KEY (category_id) REFERENCES categories(id)
 );
-
-INSERT INTO categories (name) VALUES ('Personal'), ('Trabajo');
-INSERT INTO notes (title, content, category_id) VALUES ('Primera Nota', 'Contenido de prueba', 1);
