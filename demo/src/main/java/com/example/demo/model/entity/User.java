@@ -10,22 +10,21 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "categories")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
 
-    @OneToMany(mappedBy = "category")
-    @JsonIgnore  // Evita serializar la categoría completa en la respuesta
+    private String username;
+    private String password;
+    private String email;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
     private List<Note> notes;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 }

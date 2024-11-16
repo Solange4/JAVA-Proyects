@@ -25,9 +25,13 @@ public class Note {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime created;
 
-    @ManyToOne(fetch = FetchType.EAGER) // LAZY vs EAGER??? tarea :v
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
 
 // @ManyToOne(fetch = FetchType.LAZY)
