@@ -6,9 +6,9 @@ import com.example.demo.exception.UserException;
 import com.example.demo.model.entity.User;
 import com.example.demo.model.repository.UserRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 
 @Service

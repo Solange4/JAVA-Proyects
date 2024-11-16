@@ -19,6 +19,4 @@ public interface NoteRepository extends CrudRepository<Note, Long> {
     Optional<Note> findByTitle(String title); // Optional porque no estamos seguros si hay registros
     // Listor notas por usuario
     Page<Note> findByUserId(Long userId, Pageable pageable);
-    // Listar notas por categoría y usuario
-    Page<Note> findByCategoryAndUserId(Category category, Long userId, Pageable pageable);
 }

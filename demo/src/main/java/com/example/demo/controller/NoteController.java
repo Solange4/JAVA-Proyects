@@ -4,6 +4,7 @@ import com.example.demo.dto.NoteCreationDTO;
 import com.example.demo.dto.NoteResponseDTO;
 import com.example.demo.model.entity.Note;
 import com.example.demo.service.NoteService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,50 +30,51 @@ public class NoteController {
     public ResponseEntity<NoteResponseDTO> getNoteById(@PathVariable Long id){
         Note note = noteService.getNoteById(id);
 
-        NoteResponseDTO noteResponseDTODTO = new NoteResponseDTO(
-                note.getTitle(),
-                note.getContent(),
-                note.getCreated(),
-                note.getCategory().getName()
-        );
-        return new ResponseEntity<>(noteResponseDTODTO, HttpStatus.OK);
-    }
-
-    @GetMapping("/notes/category/{id}")
-    public ResponseEntity<Page<NoteResponseDTO>> getNotesByCategory(@PathVariable Long id, @PageableDefault(page = 0, size = 10) Pageable pageable){
-        Page<NoteResponseDTO> noteList = noteService.getNoteByCategory(id, pageable);
-        return new ResponseEntity<>(noteList, HttpStatus.OK);
-    }
-
-    @PostMapping("/note")
-    public ResponseEntity<NoteResponseDTO> createNote(@RequestBody NoteCreationDTO noteCreationDTO){
-        Note note = noteService.createNote(noteCreationDTO);
-
         NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
                 note.getTitle(),
                 note.getContent(),
                 note.getCreated(),
-                note.getCategory().getName()
-        );
-        return new ResponseEntity<>(noteResponseDTO, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/note/{id}")
-    public ResponseEntity<NoteResponseDTO> updateNote(@PathVariable Long id, @RequestBody NoteCreationDTO noteCreationDTO){
-        Note note = noteService.updateNote(id, noteCreationDTO);
-
-        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
-                note.getTitle(),
-                note.getContent(),
-                note.getCreated(),
-                note.getCategory().getName()
+                note.getCategory().getName(),
+                note.getUser().getUsername()
         );
         return new ResponseEntity<>(noteResponseDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping("/note/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable Long id){
-        noteService.deleteNote(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @GetMapping("/user/{userId}/notes/category/{categoryId}")
+    public ResponseEntity<Page<NoteResponseDTO>> getNotesByCategory(@PathVariable Long userId, @PathVariable Long categoryId, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        Page<NoteResponseDTO> noteList = noteService.getNoteByCategory(categoryId, userId, pageable);
+        return new ResponseEntity<>(noteList, HttpStatus.OK);
+    }
+
+    @PostMapping("/user/{userId}/note")
+    public ResponseEntity<NoteResponseDTO> createNote(@PathVariable Long userId, @Valid @RequestBody NoteCreationDTO noteCreationDTO) {
+        Note note = noteService.createNote(noteCreationDTO, userId);
+        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+                note.getTitle(),
+                note.getContent(),
+                note.getCreated(),
+                note.getCategory().getName(),
+                note.getUser().getUsername()
+        );
+        return new ResponseEntity<>(noteResponseDTO, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/user/{userId}/note/{id}")
+    public ResponseEntity<NoteResponseDTO> updateNote(@PathVariable Long userId, @PathVariable Long id, @Valid @RequestBody NoteCreationDTO noteCreationDTO) {
+        Note note = noteService.updateNote(id, noteCreationDTO, userId);
+        NoteResponseDTO noteResponseDTO = new NoteResponseDTO(
+                note.getTitle(),
+                note.getContent(),
+                note.getCreated(),
+                note.getCategory().getName(),
+                note.getUser().getUsername()
+        );
+        return new ResponseEntity<>(noteResponseDTO, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{userId}/note/{id}")
+    public ResponseEntity<Void> deleteNote(@PathVariable Long userId, @PathVariable Long id) {
+        noteService.deleteNote(id, userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

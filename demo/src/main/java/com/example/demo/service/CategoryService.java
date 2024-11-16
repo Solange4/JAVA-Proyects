@@ -6,7 +6,7 @@ import com.example.demo.model.entity.User;
 import com.example.demo.model.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
-import javax.xml.catalog.CatalogException;
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -18,32 +18,45 @@ public class CategoryService {
         this.userService = userService;
     }
 
-    private void validateCategoryNotExists(String name){
-        categoryRepository.findByName(name).ifPresent(category -> {
-            throw new CatalogException("Category already exists with name: " + name);
-        });
-    }
-
     public Category createCategory(Category category, Long userId){
         User user = userService.getUserById(userId);
         if (categoryRepository.existsByNameAndUserId(category.getName(), userId)) {
             throw new CategoryException("Category already exists for this user");
         }
 
+        category.setUser(user);
+
         return categoryRepository.save(category);
     }
 
-    private Category getCategoryById(Long id){
-        return categoryRepository.findById(id).orElseThrow(() -> new CatalogException("Category not with ID: " + id));
+    public Category getCategoryById(Long id, Long userId){
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new CategoryException("Category not found"));
+        if (!category.getUser().getId().equals(userId)) {
+            throw new CategoryException("Category not found for this user");
+        }
+        return category;
     }
 
-    public Category updateCategory(Long id, Category category){
-        Category categoryToUpdate = getCategoryById(id);
+    public List<Category> getCategoriesByUser(Long userId) {
+        userService.getUserById(userId);
+        return categoryRepository.findByUserId(userId);
+    }
+
+
+    public Category updateCategory(Long id, Category category, Long userId){
+        Category categoryToUpdate = getCategoryById(id, userId);
+        if (!categoryToUpdate.getName().equals(category.getName()) &&
+                categoryRepository.existsByNameAndUserId(category.getName(), userId)) {
+            throw new CategoryException("Category already exists for this user");
+        }
+
         categoryToUpdate.setName(category.getName());
+
         return categoryRepository.save(categoryToUpdate);
     }
 
-    public Iterable<Category> getAllCategories(){
-        return categoryRepository.findAll();
+    public void deleteCategory(Long id, Long userId){
+        Category category = getCategoryById(id, userId);
+        categoryRepository.delete(category);
     }
 }

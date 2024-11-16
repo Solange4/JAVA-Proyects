@@ -8,6 +8,7 @@ import com.example.demo.model.entity.User;
 import com.example.demo.service.CategoryService;
 import com.example.demo.service.NoteService;
 import com.example.demo.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -58,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreationDTO userCreationDTO){
+    public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserCreationDTO userCreationDTO){
         User user = userService.createUser(userCreationDTO);
 
         UserResponseDTO userResponseDTO = new UserResponseDTO(
@@ -70,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @RequestBody UserCreationDTO userCreationDTO){
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreationDTO userCreationDTO){
         User user = userService.updateUser(id, userCreationDTO);
 
         UserResponseDTO userResponseDTO = new UserResponseDTO(
@@ -94,10 +95,8 @@ public class UserController {
     }
 
     @GetMapping("user/{userId}/categories")
-    public ResponseEntity<Page<NoteResponseDTO>> getUserCategories(@PathVariable Long userId){
+    public ResponseEntity<List<Category>> getUserCategories(@PathVariable Long userId){
         List<Category> categoryList = categoryService.getCategoriesByUser(userId);
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
-
-
 }
